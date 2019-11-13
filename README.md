@@ -3,8 +3,8 @@ Load Tests for WMS servers using the [Locust load testing framework](https://loc
 Requests GetCapabilities document and sends GetMap and GetLegendGraphic requests. Picks random layers, bounding boxes, time dimensions (if available) and styles in GetMap and GetLegendGraphic requests from the GetCapabilities document provided by the WMS service.
 
 Supported WMS versions:
- - 1.1.1 
- - 1.3.0
+ - ``1.1.1``
+ - ``1.3.0``
 
 # Run pre-built images with Docker
 The pre-built image ``eeduardrosert/locust-wms-load-test`` is available on [Dockerhub](https://hub.docker.com/r/eduardrosert/locust-wms-load-test). If you already have Docker running on your machine, just do the following to run the image.
@@ -17,7 +17,7 @@ Now you can access the Locust interface at http://localhost:8089 and start the t
 ## Run with WMS Service URL
 To load test your WMS server, e.g. running at https://example.com/wms/ run:
 ```bash
-docker run --rm -i -t -p 8089:8089 --env WMS_ACCESS_KEY=myauthkey=mysecretaccesstoken eduardrosert/locust-wms-load-test locust -f /app/wms-load-test/locustfile.py --host=https://example.com/wms
+docker run --rm -i -t -p 8089:8089 eduardrosert/locust-wms-load-test locust -f /app/wms-load-test/locustfile.py --host=https://example.com/wms
 ```
 
 ## Run with custom access token
