@@ -20,7 +20,7 @@ spec:
         app: locust-wms
     spec:
       containers:
-      - image: eduardrosert/locust-wms-load-test
+      - image: eduardrosert/locust-wms-test
         imagePullPolicy: IfNotPresent
         name: locust-wms
         env:

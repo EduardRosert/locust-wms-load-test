@@ -2,7 +2,7 @@
 TEST_CMD := locust -f /app/wms-load-test/locustfile.py --host=https://example.com/wms
 
 # META
-DOCKER_REPO := eduardrosert/locust-wms-load-test
+DOCKER_REPO := eduardrosert/locust-wms-test
 SOURCE_COMMIT := $(shell git rev-parse HEAD)
 GIT_TAG  := $(shell git tag)
 
