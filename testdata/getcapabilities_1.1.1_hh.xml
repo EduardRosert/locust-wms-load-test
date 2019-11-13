@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WMT_MS_Capabilities version="1.1.1">
+  <Service>
+    <Name><![CDATA[WMS]]></Name>
+    <Title><![CDATA[Adressen]]></Title>
+    <Abstract>OGC:WMS</Abstract>
+    <KeywordList><Keyword><![CDATA[]]></Keyword></KeywordList>
+    <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://geodienste.hamburg.de/HH_WMS_ALKIS_Adressen?"/>
+    <ContactInformation>
+      <ContactPersonPrimary>
+        <ContactPerson><![CDATA[]]></ContactPerson>
+        <ContactOrganization><![CDATA[Landesbetrieb Geoinformation und Vermessung]]></ContactOrganization>
+      </ContactPersonPrimary>
+      <ContactPosition><![CDATA[Präsentation Geobasisdaten]]></ContactPosition>
+      <ContactAddress>
+        <AddressType><![CDATA[postal]]></AddressType>
+        <Address><![CDATA[Neuenfelder Straße 19]]></Address>
+        <City><![CDATA[Hamburg]]></City>
+        <StateOrProvince><![CDATA[HH]]></StateOrProvince>
+        <PostCode><![CDATA[21109]]></PostCode>
+        <Country><![CDATA[Germany]]></Country>
+      </ContactAddress>
+      <ContactVoiceTelephone><![CDATA[]]></ContactVoiceTelephone>
+      <ContactFacsimileTelephone><![CDATA[]]></ContactFacsimileTelephone>
+      <ContactElectronicMailAddress><![CDATA[LGVALKIS-Hilfe@gv.hamburg.de]]></ContactElectronicMailAddress>
+    </ContactInformation>
+    <Fees><![CDATA[DE: kostenfrei fuer die nicht-kommerzielle Nutzung]]></Fees>
+    <AccessConstraints><![CDATA[DE: Die Daten sind gesetzlich geschuetzt. Eine kommerzielle Nutzung des Kartendienstes erfordert die schriftliche Zustimmung des Landesbetriebs Geoinformation und Vermessung Hamburg]]></AccessConstraints>
+  </Service>
+  <Capability>
+    <Request>
+      <GetCapabilities>
+        <Format>application/vnd.ogc.wms_xml</Format>
+        <DCPType>
+          <HTTP><Get><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://geodienste.hamburg.de/HH_WMS_ALKIS_Adressen?"/></Get></HTTP>
+        </DCPType>
+      </GetCapabilities>
+      <GetMap>
+        <Format>image/bmp</Format>
+        <Format>image/jpeg</Format>
+        <Format>image/tiff</Format>
+        <Format>image/png</Format>
+        <Format>image/png8</Format>
+        <Format>image/png24</Format>
+        <Format>image/png32</Format>
+        <Format>image/gif</Format>
+        <Format>image/svg+xml</Format>
+        <DCPType>
+          <HTTP><Get><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://geodienste.hamburg.de/HH_WMS_ALKIS_Adressen?"/></Get></HTTP>
+        </DCPType>
+      </GetMap>
+      <GetFeatureInfo>
+        <Format>application/vnd.esri.wms_raw_xml</Format>
+        <Format>application/vnd.esri.wms_featureinfo_xml</Format>
+        <Format>application/vnd.ogc.wms_xml</Format>
+        <Format>application/geojson</Format>
+        <Format>text/xml</Format>
+        <Format>text/html</Format>
+        <Format>text/plain</Format>
+        <DCPType>
+          <HTTP><Get><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://geodienste.hamburg.de/HH_WMS_ALKIS_Adressen?"/></Get></HTTP>
+        </DCPType>
+      </GetFeatureInfo>
+      <GetStyles>
+        <Format>application/vnd.ogc.sld+xml</Format>
+        <DCPType>
+          <HTTP><Get><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://geodienste.hamburg.de/HH_WMS_ALKIS_Adressen?"/></Get></HTTP>
+        </DCPType>
+      </GetStyles>
+    </Request>
+    <Exception>
+      <Format>application/vnd.ogc.se_xml</Format>
+      <Format>application/vnd.ogc.se_inimage</Format>
+      <Format>application/vnd.ogc.se_blank</Format>
+    </Exception>
+    <Layer>
+      <Title><![CDATA[ALKIS Adressen]]></Title>
+<SRS>EPSG:4326</SRS>
+<SRS>EPSG:25832</SRS>
+<LatLonBoundingBox minx="8.412924" miny="53.394007" maxx="10.341365" maxy="53.966209"/>
+<BoundingBox SRS="EPSG:4326" minx="8.412924" miny="53.394007" maxx="10.341365" maxy="53.966209"/>
+<BoundingBox SRS="EPSG:25832" minx="461485.132000" miny="5916918.107000" maxx="588010.382000" maxy="5979762.107000"/>
+      <Layer queryable="1">
+        <Name>0</Name>
+        <Title><![CDATA[Baublock]]></Title>
+        <Abstract><![CDATA[]]></Abstract>
+<SRS>EPSG:4326</SRS>
+<SRS>EPSG:25832</SRS>
+<LatLonBoundingBox minx="8.412924" miny="53.394007" maxx="10.341365" maxy="53.966209"/>
+<BoundingBox SRS="EPSG:4326" minx="8.412924" miny="53.394007" maxx="10.341365" maxy="53.966209"/>
+<BoundingBox SRS="EPSG:25832" minx="461485.132000" miny="5916918.107000" maxx="588010.382000" maxy="5979762.107000"/>
+        <Style>
+          <Name>default</Name>
+          <Title>0</Title>
+          <LegendURL width="16" height="16">
+            <Format>image/png</Format>
+            <OnlineResource xlink:href="https://geodienste.hamburg.de/HH_WMS_ALKIS_Adressen?request=GetLegendGraphic%26version=1.1.1%26format=image/png%26layer=0" xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink" />
+          </LegendURL>
+        </Style>
+        <ScaleHint min="0.000396" max="1.980295"></ScaleHint>
+      </Layer>
+      <Layer queryable="1">
+        <Name>1</Name>
+        <Title><![CDATA[Strassenschluessel]]></Title>
+        <Abstract><![CDATA[]]></Abstract>
+<SRS>EPSG:4326</SRS>
+<SRS>EPSG:25832</SRS>
+<LatLonBoundingBox minx="8.497079" miny="53.396625" maxx="10.338053" maxy="53.915578"/>
+<BoundingBox SRS="EPSG:4326" minx="8.497079" miny="53.396625" maxx="10.338053" maxy="53.915578"/>
+<BoundingBox SRS="EPSG:25832" minx="466966.418000" miny="5917207.349000" maxx="587899.359000" maxy="5974128.891000"/>
+        <Style>
+          <Name>default</Name>
+          <Title>1</Title>
+          <LegendURL width="16" height="16">
+            <Format>image/png</Format>
+            <OnlineResource xlink:href="https://geodienste.hamburg.de/HH_WMS_ALKIS_Adressen?request=GetLegendGraphic%26version=1.1.1%26format=image/png%26layer=1" xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink" />
+          </LegendURL>
+        </Style>
+        <ScaleHint min="0.194030" max="1.980295"></ScaleHint>
+      </Layer>
+      <Layer queryable="1">
+        <Name>2</Name>
+        <Title><![CDATA[Strassenname]]></Title>
+        <Abstract><![CDATA[]]></Abstract>
+<SRS>EPSG:4326</SRS>
+<SRS>EPSG:25832</SRS>
+<LatLonBoundingBox minx="8.497079" miny="53.396625" maxx="10.338053" maxy="53.915578"/>
+<BoundingBox SRS="EPSG:4326" minx="8.497079" miny="53.396625" maxx="10.338053" maxy="53.915578"/>
+<BoundingBox SRS="EPSG:25832" minx="466966.418000" miny="5917207.349000" maxx="587899.359000" maxy="5974128.891000"/>
+        <Style>
+          <Name>default</Name>
+          <Title>2</Title>
+          <LegendURL width="16" height="16">
+            <Format>image/png</Format>
+            <OnlineResource xlink:href="https://geodienste.hamburg.de/HH_WMS_ALKIS_Adressen?request=GetLegendGraphic%26version=1.1.1%26format=image/png%26layer=2" xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink" />
+          </LegendURL>
+        </Style>
+        <ScaleHint min="0.194030" max="1.980295"></ScaleHint>
+      </Layer>
+      <Layer queryable="1">
+        <Name>3</Name>
+        <Title><![CDATA[Hausnummer]]></Title>
+        <Abstract><![CDATA[]]></Abstract>
+<SRS>EPSG:4326</SRS>
+<SRS>EPSG:25832</SRS>
+<LatLonBoundingBox minx="8.489134" miny="53.396916" maxx="10.332114" maxy="53.923495"/>
+<BoundingBox SRS="EPSG:4326" minx="8.489134" miny="53.396916" maxx="10.332114" maxy="53.923495"/>
+<BoundingBox SRS="EPSG:25832" minx="466450.850000" miny="5917232.199000" maxx="587492.552000" maxy="5975009.756000"/>
+        <Style>
+          <Name>default</Name>
+          <Title>3</Title>
+          <LegendURL width="16" height="16">
+            <Format>image/png</Format>
+            <OnlineResource xlink:href="https://geodienste.hamburg.de/HH_WMS_ALKIS_Adressen?request=GetLegendGraphic%26version=1.1.1%26format=image/png%26layer=3" xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink" />
+          </LegendURL>
+        </Style>
+        <ScaleHint min="0.194030" max="0.593970"></ScaleHint>
+      </Layer>
+      <Layer queryable="1">
+        <Name>4</Name>
+        <Title><![CDATA[Flurstuecksinfo]]></Title>
+        <Abstract><![CDATA[]]></Abstract>
+<SRS>EPSG:4326</SRS>
+<SRS>EPSG:25832</SRS>
+<LatLonBoundingBox minx="8.412924" miny="53.394007" maxx="10.341365" maxy="53.966209"/>
+<BoundingBox SRS="EPSG:4326" minx="8.412924" miny="53.394007" maxx="10.341365" maxy="53.966209"/>
+<BoundingBox SRS="EPSG:25832" minx="461485.132000" miny="5916918.107000" maxx="588010.382000" maxy="5979762.107000"/>
+        <Style>
+          <Name>default</Name>
+          <Title>4</Title>
+          <LegendURL width="16" height="16">
+            <Format>image/png</Format>
+            <OnlineResource xlink:href="https://geodienste.hamburg.de/HH_WMS_ALKIS_Adressen?request=GetLegendGraphic%26version=1.1.1%26format=image/png%26layer=4" xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink" />
+          </LegendURL>
+        </Style>
+        <ScaleHint min="0.194030" max="1.980295"></ScaleHint>
+      </Layer>
+      <Layer queryable="1">
+        <Name>5</Name>
+        <Title><![CDATA[Gebaeude]]></Title>
+        <Abstract><![CDATA[]]></Abstract>
+<SRS>EPSG:4326</SRS>
+<SRS>EPSG:25832</SRS>
+<LatLonBoundingBox minx="8.429053" miny="53.396736" maxx="10.335204" maxy="53.963470"/>
+<BoundingBox SRS="EPSG:4326" minx="8.429053" miny="53.396736" maxx="10.335204" maxy="53.963470"/>
+<BoundingBox SRS="EPSG:25832" minx="462540.898000" miny="5917214.441000" maxx="587611.770000" maxy="5979457.375000"/>
+        <Style>
+          <Name>default</Name>
+          <Title>5</Title>
+          <LegendURL width="16" height="16">
+            <Format>image/png</Format>
+            <OnlineResource xlink:href="https://geodienste.hamburg.de/HH_WMS_ALKIS_Adressen?request=GetLegendGraphic%26version=1.1.1%26format=image/png%26layer=5" xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink" />
+          </LegendURL>
+        </Style>
+        <ScaleHint min="0.194030" max="1.980295"></ScaleHint>
+      </Layer>
+      <Layer queryable="1">
+        <Name>6</Name>
+        <Title><![CDATA[Adresse]]></Title>
+        <Abstract><![CDATA[]]></Abstract>
+<SRS>EPSG:4326</SRS>
+<SRS>EPSG:25832</SRS>
+<LatLonBoundingBox minx="8.489134" miny="53.396772" maxx="10.332114" maxy="53.923495"/>
+<BoundingBox SRS="EPSG:4326" minx="8.489134" miny="53.396772" maxx="10.332114" maxy="53.923495"/>
+<BoundingBox SRS="EPSG:25832" minx="466450.850000" miny="5917216.213000" maxx="587492.552000" maxy="5975009.756000"/>
+        <Style>
+          <Name>default</Name>
+          <Title>6</Title>
+          <LegendURL width="16" height="16">
+            <Format>image/png</Format>
+            <OnlineResource xlink:href="https://geodienste.hamburg.de/HH_WMS_ALKIS_Adressen?request=GetLegendGraphic%26version=1.1.1%26format=image/png%26layer=6" xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink" />
+          </LegendURL>
+        </Style>
+        <ScaleHint min="0.194030" max="1.980295"></ScaleHint>
+      </Layer>
+    </Layer>
+  </Capability>
+</WMT_MS_Capabilities>
