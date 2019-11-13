@@ -1,4 +1,15 @@
 # locust-wms-load-test
+## Git
+[![Git Tag](https://img.shields.io/github/v/tag/eduardrosert/locust-wms-load-test)](https://github.com/eduardrosert/locust-wms-load-test/releases)
+[![License](https://img.shields.io/github/license/eduardrosert/locust-wms-load-test)](https://github.com/eduardrosert/locust-wms-load-test)
+## Docker
+[![Docker Automated build](https://img.shields.io/docker/cloud/automated/eduardrosert/locust-wms-test.svg)](https://hub.docker.com/r/eduardrosert/locust-wms-test)
+[![Docker Build Status](https://img.shields.io/docker/cloud/build/eduardrosert/locust-wms-test.svg)](https://hub.docker.com/r/eduardrosert/locust-wms-test)
+[![Docker Pulls](https://img.shields.io/docker/pulls/eduardrosert/locust-wms-test)](https://hub.docker.com/r/eduardrosert/locust-wms-test)
+[![Docker Image Version](https://images.microbadger.com/badges/version/eduardrosert/locust-wms-test.svg)](https://microbadger.com/images/eduardrosert/locust-wms-test "Get your own version badge on microbadger.com")
+[![Docker Commit Reference](https://images.microbadger.com/badges/commit/eduardrosert/locust-wms-test.svg)](https://microbadger.com/images/eduardrosert/locust-wms-test "Get your own commit badge on microbadger.com")
+
+
 Load Tests for WMS servers using the [Locust load testing framework](https://locust.io) packaged in a docker container.
 Requests GetCapabilities document and sends GetMap and GetLegendGraphic requests. Picks random layers, bounding boxes, time dimensions (if available) and styles in GetMap and GetLegendGraphic requests from the GetCapabilities document provided by the WMS service.
 
