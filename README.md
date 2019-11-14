@@ -62,7 +62,7 @@ env:
 - name: WMS_SERVICE_URL
   value: "https://example.com/wms"
 ```
-After editing, reapply the configuration using ``kubeclt apply -f k8s-locust-wms-test.yaml``
+After editing, reapply the configuration using ``kubectl apply -f k8s-locust-wms-test.yaml``.
 
 ## Run with custom access token
 If your WMS server requires a simple authentication using some access token in the request, e.g. ``myauthkey=mysecretaccesstoken``, you can provide that token using the environment variable ``WMS_ACCESS_KEY``in the deployment configuration. Edit file ``k8s-locust-wms-test.yaml`` and add the environment variable ``WMS_ACCESS_KEY`` with the key-value pair of your access token, e.g. ``myauthkey=mysecretaccesstoken``:
@@ -73,4 +73,4 @@ env:
 - name: WMS_ACCESS_KEY
   value: "myauthkey=mysecretaccesstoken"
 ```
-After editing, reapply the configuration using ``kubeclt apply -f k8s-locust-wms-test.yaml``
+After editing, reapply the configuration using ``kubectl apply -f k8s-locust-wms-test.yaml``.
