@@ -1,4 +1,4 @@
-# locust-wms-load-test
+# OGC Web Map Service (WMS) Load Test
 ## Git
 [![Git Tag](https://img.shields.io/github/v/tag/eduardrosert/locust-wms-load-test)](https://github.com/eduardrosert/locust-wms-load-test/releases)
 [![License](https://img.shields.io/github/license/eduardrosert/locust-wms-load-test)](https://github.com/eduardrosert/locust-wms-load-test)
