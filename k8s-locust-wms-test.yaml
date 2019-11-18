@@ -28,6 +28,14 @@ spec:
           value: "https://example.com/wms"
         #- name: WMS_ACCESS_KEY
         #  value: "myauthkey=mysecretaccesstoken"
+        #- name: WEIGHT_GET_CAPABILITIES
+        #  value: 1
+        #- name: WEIGHT_GET_LEGEND_GRAPHIC
+        #  value: 2
+        #- name: WEIGHT_GET_MAP
+        #  value: 10
+        #- name: LOG_VERBOSE
+        #  value: 1
         command: ["/bin/bash", "-c"]
         args: [ "locust -f /app/wms-load-test/locustfile.py --host=$WMS_SERVICE_URL"]
         resources: {}

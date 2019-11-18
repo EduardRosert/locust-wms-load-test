@@ -25,6 +25,21 @@ if not keyvalue is None:
     parts = keyvalue.split("=")
     WMS_ACCESSS_KEY[parts[0]]=parts[1]
 
+WEIGHT_GET_CAPABILITIES = int(os.getenv('WEIGHT_GET_CAPABILITIES', "1"))
+WEIGHT_GET_LEGEND_GRAPHIC = int(os.getenv('WEIGHT_GET_LEGEND_GRAPHIC', "2"))
+WEIGHT_GET_MAP = int(os.getenv('WEIGHT_GET_MAP', "10"))
+
+verbose = os.getenv('LOG_VERBOSE', '0')
+VERBOSE = False
+if verbose.lower() == "1":
+    VERBOSE = True
+
+if VERBOSE:
+    def vprint(*args, **kwargs):
+        print(*args, **kwargs)
+else:
+    vprint = lambda *a, **k: None # do-nothing function
+
 WMS_VERSION_111 = "1.1.1"
 WMS_VERSION_130 = "1.3.0"
 
@@ -146,7 +161,18 @@ def getLegendURL( style: xmltodict.OrderedDict):
     return legendUrl
 
 
+def formatDateTime(ts:datetime):
+    """
+        Formats the datetime according to D.2.1 of WMS Spec: ccyy-mm-ddThh:mm:ss.sssZ
 
+        A time zone suffix is mandatory if the hours field appears in the time string. 
+        All times should be expressed in Coordinated Universal Time (UTC), indicated 
+        by the suffix Z (for "zulu"). When a local time applies, a numeric time zone 
+        suffix as defined by ISO 8601:2004, 5.3.4.1 shall be used. The absence of any 
+        suffix at all means local time in an undefined zone, which shall not be 
+        used in the global network of map servers enabled by this International Standard.
+    """
+    return ts.isoformat(timespec='milliseconds').replace("+00:00","Z")
 
 def enumerateAvailableTimes(text:str):
     """
@@ -186,7 +212,7 @@ def enumerateAvailableTimes(text:str):
             except:
                 raise Exception("Error parsing the step in time definition: '{}'".format(definition))
             while start <= end:
-                values.append(datetime.strftime(start, TIME_FORMAT_ISO8601))
+                values.append( formatDateTime(start))
                 start = start + delta
             #values["beginning"] = beginning
             #values["end"] = end
@@ -415,8 +441,11 @@ def sendGetCapabilitiesRequest(client:locustclients.HttpSession, wmsversion:str)
     params = getGetCapabilitiesRequest(wmsversion=wmsversion)
 
     with client.request("GET", "", params=params, name="WMS-{}-GetCapabilities".format(wmsversion), catch_response=True ) as response:
+        url = urllib.parse.unquote(response.url)
         if not response.status_code == 200:
-            response.failure("Request failed with HTTP status code: '{}'\nResponse-Content: '{}'".format(response.status_code, response.content ) )
+            errormsg = "Request failed with HTTP status code: '{}'\n Request URL: {}\n Response-Content: '{}'".format(response.status_code, url, response.content )
+            vprint( "Request failed:\n{}".format(errormsg) )
+            response.failure(errormsg)
             return
         
         if not hasValidGetCapabilitiesResponseType(response.headers['content-type']):
@@ -429,6 +458,7 @@ def sendGetCapabilitiesRequest(client:locustclients.HttpSession, wmsversion:str)
         
         try:
             capabilities = xmltodict.parse(response.content)
+            #vprint("Request successful: {}".format(url))
             return capabilities
         except:
             response.failure("Failed to parse GetCapabilities XML")
@@ -437,22 +467,36 @@ def sendGetCapabilitiesRequest(client:locustclients.HttpSession, wmsversion:str)
 def sendGetMapRequest(client:locustclients.HttpSession, params:dict, wmsversion:str):
     with client.request("GET", "", params=params, name="WMS-{}-GetMap".format(wmsversion), catch_response=True ) as response:
         if response.status_code == 200:
+            url = urllib.parse.unquote(response.url)
             if response.headers['content-type'] != "image/png":
-                response.failure("Expected format 'image/png' but got '{}' instead\n Request params: '{}'\nResponse: '{}'\n".format(response.headers['content-type'], params, response.text) )
+                errormsg = "Expected format 'image/png' but got '{}' instead\n Request URL: {}\n Request params: '{}'\nResponse: '{}'\n".format(response.headers['content-type'], url, params, response.text)
+                vprint( "Request failed:\n{}".format(errormsg) )
+                response.failure(errormsg)
             else:
+                #vprint("Request successful: {}".format(url))
                 response.success()
 
 
 def sendGetLegendGraphicRequest(client:locustclients.HttpSession, params:dict, wmsversion:str):
-    with client.request("GET", "", params=params, name="WMS-{}-GetLegendGraphic".format(wmsversion), catch_response=True ) as response:
+    requestUrl = ""
+    if "url" in params:
+        # extract request url from params
+        requestUrl = params["url"]
+        params.pop("url")
+
+    with client.request("GET", requestUrl, params=params, name="WMS-{}-GetLegendGraphic".format(wmsversion), catch_response=True ) as response:
         #if response.history:
         #    #Response was redirected
         #    for resp in response.history:
         #        print("Redirected with code '{}' to url '{}'".format(resp.status_code,resp.url))
         if response.status_code == 200:
+            url = urllib.parse.unquote(response.url)
             if response.headers['content-type'] != "image/png":
-                response.failure("Expected format 'image/png' but got '{}' instead\n Request params: '{}'\nResponse: '{}'\n".format(response.headers['content-type'], params, response.text) )
+                errormsg = "Expected format 'image/png' but got '{}' instead\n Request URL: {}\n Request params: '{}'\nResponse: '{}'\n".format(response.headers['content-type'], url, params, response.text) 
+                vprint( "Request failed:\n{}".format(errormsg) )
+                response.failure(errormsg)
             else:
+                #vprint("Request successful: {}".format(url))
                 response.success()
 
 class WebsiteTasks(TaskSet):
@@ -469,7 +513,7 @@ class WebsiteTasks(TaskSet):
     #def index(self):
     #    self.client.get("/")
 
-    @task(1)
+    @task(WEIGHT_GET_CAPABILITIES)
     def get_capa(self):
         wmsversion = random.choice(WMS_SUPPORTED_VERSIONS)
         capabilities = sendGetCapabilitiesRequest(client=self.client, wmsversion=wmsversion)
@@ -482,7 +526,7 @@ class WebsiteTasks(TaskSet):
             # for each WMS version
             self.allLayers[wmsversion] = getAllLayers(capabilities=capabilities, wmsversion=wmsversion)
 
-    @task(2)
+    @task(WEIGHT_GET_LEGEND_GRAPHIC)
     def get_legend_graphic(self):
         wmsversion = random.choice(WMS_SUPPORTED_VERSIONS)
         if not wmsversion in self.allLayers:
@@ -495,7 +539,7 @@ class WebsiteTasks(TaskSet):
         if not getLegendGraphicRequest is None:
             sendGetLegendGraphicRequest(client=self.client, params=getLegendGraphicRequest, wmsversion=wmsversion)
 
-    @task(10)
+    @task(WEIGHT_GET_MAP)
     def get_map(self):
         wmsversion = random.choice(WMS_SUPPORTED_VERSIONS)
         if not wmsversion in self.allLayers:
