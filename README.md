@@ -28,13 +28,20 @@ Now you can access the Locust interface at http://localhost:8089 and start the t
 ## Run with WMS Service URL
 To load test your WMS server, e.g. running at https://example.com/wms/ run:
 ```bash
-docker run --rm -i -t -p 8089:8089 eduardrosert/locust-wms-test locust -f /app/wms-load-test/locustfile.py --host=https://example.com/wms
+docker run --rm -i -t -p 8089:8089 \
+       eduardrosert/locust-wms-test \
+       locust -f /app/wms-load-test/locustfile.py \
+              --host=https://example.com/wms
 ```
 
 ## Run with custom access token
 If your WMS server requires a simple authentication using some access token in the request, e.g. ``myauthkey=mysecretaccesstoken``, you can provide that token using the environment variable ``WMS_ACCESS_KEY``as follows:
 ```bash
-docker run --rm -i -t -p 8089:8089 --env WMS_ACCESS_KEY=myauthkey=mysecretaccesstoken eduardrosert/locust-wms-test locust -f /app/wms-load-test/locustfile.py --host=https://example.com/wms
+docker run --rm -i -t -p 8089:8089 \
+       --env WMS_ACCESS_KEY=myauthkey=mysecretaccesstoken \
+       eduardrosert/locust-wms-test \
+       locust -f /app/wms-load-test/locustfile.py \
+              --host=https://example.com/wms
 ```
 
 # Run pre-build images with Kubernetes
