@@ -396,7 +396,7 @@ def getRandomLegendUrlRequest(allLayers:dict, wmsversion:str):
             keyvalue = param.split("=")
             getLegendGraphicRequest[keyvalue[0]] = keyvalue[1]
         else:
-            getLegendGraphicRequest[keyvalue] = ""
+            getLegendGraphicRequest[param] = ""
 
     # HACK: hack for invalid LegendUrls in skinnywms
     if not "height" in getLegendGraphicRequest.keys() or getLegendGraphicRequest["height"] == "":
