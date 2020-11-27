@@ -1,7 +1,4 @@
-# Build image
-#FROM locustio/locust:0.12.2
-#FROM python:3.8
-FROM python:3.6-slim-stretch
+FROM locustio/locust:0.14.6
 
 # Install Python run-time dependencies.
 COPY requirements.txt /
