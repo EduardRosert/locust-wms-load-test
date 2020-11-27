@@ -2,4 +2,4 @@
 # pip freeze > requirements.txt
 xmltodict==0.12.0
 python-dateutil==2.8.1
-locustio==0.12.2
+#locustio==0.14.6
