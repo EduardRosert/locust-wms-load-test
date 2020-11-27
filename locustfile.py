@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-from locust import HttpLocust, TaskSet, task
+from typing import Optional
+from locust import HttpLocust, TaskSet, task, between
 from locust import clients as locustclients
 import urllib.parse
 
@@ -235,24 +236,29 @@ def getRandomTime(start:datetime, end:datetime, step:relativedelta):
     return end - radomdelta
 
 
-def parseDimension(dimension:xmltodict.OrderedDict):
+def parseDimension(dimension:xmltodict.OrderedDict) -> dict:
+    """Parse the dimension/extent defintions (WMS Version 1.1.1/1.3.0)
+
+    :param dimension: the WMS GetCapabilities 'Dimension'
+    :type dimension: xmltodict.OrderedDict
+    :raises ValueError: If dimension could not be parsed
+    :return: a dictionary {"name": X, "values": Y, "default": Z}, could contain 'None' values
+    :rtype: dict
     """
-        Parse the dimension/extent defintions (WMS Version 1.1.1/1.3.0)
-    """
+
     try:
-        #possible values defined
+        #use defined values defined or try to fallback to @default
+        name = dimension["@name"] if "@name" in dimension.keys() else None
+        default = dimension["@default"] if "@default" in dimension.keys() else None
+        values = dimension["#text"] if "#text" in dimension.keys() else default
         dim = {
-            "name" : dimension["@name"],
-            "values" : dimension["#text"], #possible values
-            "default" : dimension["@default"] #default value
+            "name" : name,
+            "values" : values, #possible values
+            "default" : default #optional default value
         }
     except:
-        # no values defined
-        dim = {
-            "name" : dimension["@name"],
-            "values" : dimension["@default"], #fall back to default
-            "default" : dimension["@default"] #default value
-        }
+        # some required attribute was missing
+        raise ValueError(f"Could not parse dimension '{dimension}'.")
     
     if dim["name"] == "time":
         times = enumerateAvailableTimes(dim["values"])
@@ -375,7 +381,12 @@ def getRandomLegendUrlRequest(allLayers:dict, wmsversion:str):
     randomStyleName = random.choice(list(randomLayer["styles"].keys()))
 
     url = randomLayer["styles"][randomStyleName]["LegendURL"]
+    if url is None:
+        return None
     url = urllib.parse.unquote(url)
+    if "?" not in url:
+        return { "url": url, "params":[]} # static legend graphic url
+
     getLegendGraphicRequest = {
         "url" : url.split("?")[0]
     }
@@ -459,10 +470,20 @@ def sendGetCapabilitiesRequest(client:locustclients.HttpSession, wmsversion:str)
         try:
             capabilities = xmltodict.parse(response.content)
             #vprint("Request successful: {}".format(url))
-            return capabilities
+            #return capabilities
         except:
             response.failure("Failed to parse GetCapabilities XML")
             return
+        
+        try:
+            # parse the capabilities document once
+            # for each WMS version
+            parsed_layers = getAllLayers(capabilities=capabilities, wmsversion=wmsversion)
+            return parsed_layers
+        except Exception as ex:
+            response.failure("Failed to extract layers from GetCapabilities XML version '{0}'. Error: {1}".format(wmsversion,ex))
+            return
+        
 
 def sendGetMapRequest(client:locustclients.HttpSession, params:dict, wmsversion:str):
     with client.request("GET", "", params=params, name="WMS-{}-GetMap".format(wmsversion), catch_response=True ) as response:
@@ -516,15 +537,15 @@ class WebsiteTasks(TaskSet):
     @task(WEIGHT_GET_CAPABILITIES)
     def get_capa(self):
         wmsversion = random.choice(WMS_SUPPORTED_VERSIONS)
-        capabilities = sendGetCapabilitiesRequest(client=self.client, wmsversion=wmsversion)
+        all_layers = sendGetCapabilitiesRequest(client=self.client, wmsversion=wmsversion)
 
-        if capabilities is None:
+        if all_layers is None:
             return
         
-        if not wmsversion in self.allLayers:
+        if not wmsversion in self.allLayers.keys():
             # parse the capabilities document once
             # for each WMS version
-            self.allLayers[wmsversion] = getAllLayers(capabilities=capabilities, wmsversion=wmsversion)
+            self.allLayers[wmsversion] = all_layers
 
     @task(WEIGHT_GET_LEGEND_GRAPHIC)
     def get_legend_graphic(self):
@@ -542,7 +563,7 @@ class WebsiteTasks(TaskSet):
     @task(WEIGHT_GET_MAP)
     def get_map(self):
         wmsversion = random.choice(WMS_SUPPORTED_VERSIONS)
-        if not wmsversion in self.allLayers:
+        if not wmsversion in self.allLayers.keys():
             # Get Capabilities document not (yet) processed
             return
         getMapRequest = getRandomGetMapRequest(self.allLayers[wmsversion], wmsversion=wmsversion)
@@ -552,8 +573,7 @@ class WebsiteTasks(TaskSet):
 
 class WebsiteUser(HttpLocust):
     task_set = WebsiteTasks
-    min_wait = 5000
-    max_wait = 15000
+    wait_time = between(5, 15)
 
 
 if __name__ == "__main__":
