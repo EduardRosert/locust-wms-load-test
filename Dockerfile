@@ -1,4 +1,4 @@
-FROM locustio/locust:0.14.6
+FROM locustio/locust:2.2.3
 
 # Install Python run-time dependencies.
 COPY requirements.txt /
@@ -12,7 +12,9 @@ COPY testdata /app/wms-load-test/testdata
 # locust will listen at http://0.0.0.0:8089 by default
 EXPOSE 8089/tcp
 
-CMD locust -f /app/wms-load-test/locustfile.py --host=https://example.com/wms
+WORKDIR /app/wms-load-test/
+
+#CMD -f /app/wms-load-test/locustfile.py --host=https://example.com/wms
 #CMD python /app/wms-load-test/locustfile.py
 
 # METADATA

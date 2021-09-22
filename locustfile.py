@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from typing import Optional
-from locust import HttpLocust, TaskSet, task, between
+from locust import HttpUser, TaskSet, task, between
 from locust import clients as locustclients
 import urllib.parse
 
@@ -452,9 +452,17 @@ def sendGetCapabilitiesRequest(client:locustclients.HttpSession, wmsversion:str)
     params = getGetCapabilitiesRequest(wmsversion=wmsversion)
 
     with client.request("GET", "", params=params, name="WMS-{}-GetCapabilities".format(wmsversion), catch_response=True ) as response:
-        url = urllib.parse.unquote(response.url)
+        if response.url is None:
+            response.failure("Request failed. No response from server.")
+            return
+
         if not response.status_code == 200:
-            errormsg = "Request failed with HTTP status code: '{}'\n Request URL: {}\n Response-Content: '{}'".format(response.status_code, url, response.content )
+            url = urllib.parse.unquote(response.url)
+            errormsg = "Request failed with HTTP status code: '{}'\n Request URL: {}\n Request Params: {}\n Response-Content: '{}'".format(
+                response.status_code, 
+                url, 
+                params, 
+                response.content )
             vprint( "Request failed:\n{}".format(errormsg) )
             response.failure(errormsg)
             return
@@ -487,6 +495,10 @@ def sendGetCapabilitiesRequest(client:locustclients.HttpSession, wmsversion:str)
 
 def sendGetMapRequest(client:locustclients.HttpSession, params:dict, wmsversion:str):
     with client.request("GET", "", params=params, name="WMS-{}-GetMap".format(wmsversion), catch_response=True ) as response:
+        if response.url is None:
+            response.failure("Request failed. No response from server.")
+            return
+
         if response.status_code == 200:
             url = urllib.parse.unquote(response.url)
             if response.headers['content-type'] != "image/png":
@@ -510,10 +522,18 @@ def sendGetLegendGraphicRequest(client:locustclients.HttpSession, params:dict, w
         #    #Response was redirected
         #    for resp in response.history:
         #        print("Redirected with code '{}' to url '{}'".format(resp.status_code,resp.url))
+        if response.url is None:
+            response.failure("Request failed. No response from server.")
+            return
+
         if response.status_code == 200:
             url = urllib.parse.unquote(response.url)
             if response.headers['content-type'] != "image/png":
-                errormsg = "Expected format 'image/png' but got '{}' instead\n Request URL: {}\n Request params: '{}'\nResponse: '{}'\n".format(response.headers['content-type'], url, params, response.text) 
+                errormsg = "Expected format 'image/png' but got '{}' instead\n Request URL: {}\n Request params: '{}'\nResponse: '{}'\n".format(
+                    response.headers['content-type'], 
+                    url, 
+                    params, 
+                    response.text) 
                 vprint( "Request failed:\n{}".format(errormsg) )
                 response.failure(errormsg)
             else:
@@ -530,8 +550,8 @@ class WebsiteTasks(TaskSet):
     allLayers = {
     }
 
-    #@task(2)
-    #def index(self):
+    # @task(2)
+    # def index(self):
     #    self.client.get("/")
 
     @task(WEIGHT_GET_CAPABILITIES)
@@ -571,8 +591,8 @@ class WebsiteTasks(TaskSet):
 
 
 
-class WebsiteUser(HttpLocust):
-    task_set = WebsiteTasks
+class WebsiteUser(HttpUser):
+    tasks = [WebsiteTasks]
     wait_time = between(5, 15)
 
 
