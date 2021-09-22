@@ -1,15 +1,15 @@
 # test cmd
-TEST_CMD := locust -f /app/wms-load-test/locustfile.py --host=https://example.com/wms
+TEST_CMD := -f /app/wms-load-test/locustfile.py
 
 # META
 DOCKER_REPO := eduardrosert/locust-wms-test
 SOURCE_COMMIT := $(shell git rev-parse HEAD)
-GIT_TAG  := $(shell git tag)
+GIT_TAG  := $(shell git describe --tags --abbrev=0)
 
 # Find out if the working directory is clean
 GIT_NOT_CLEAN_CHECK := $(shell git status --porcelain)
 ifneq (x${GIT_NOT_CLEAN_CHECK}, x)
-DOCKER_TAG_SUFFIX = "-dirty"
+DOCKER_TAG_SUFFIX = -dirty
 endif
 
 GIT_URL := $(shell git config --get remote.origin.url)
@@ -21,7 +21,7 @@ DATE    := $(shell date -u +%Y-%m-%dT%H:%M:%SZ)
 ifeq ('${GIT_TAG}','')
 DOCKER_TAG = latest
 else
-DOCKER_TAG = version-${GIT_TAG}
+DOCKER_TAG = version-$(GIT_TAG)
 endif
 IMAGE_NAME = ${DOCKER_REPO}:${DOCKER_TAG}${DOCKER_TAG_SUFFIX}
 
@@ -38,7 +38,7 @@ all: build
 
 build:
 	@echo "Building ${IMAGE_NAME} ..."
-	@docker build \
+	docker build \
 		--build-arg BUILD_DATE=${DATE} \
 		--build-arg VCS_URL=${GIT_URL} \
 		--build-arg VCS_REF=${SOURCE_COMMIT} \

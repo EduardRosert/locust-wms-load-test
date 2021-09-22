@@ -25,23 +25,25 @@ docker run --rm -i -t -p 8089:8089 eduardrosert/locust-wms-test
 ```
 Now you can access the Locust interface at http://localhost:8089 and start the tests.
 
-## Run with WMS Service URL
-To load test your WMS server, e.g. running at https://example.com/wms/ run:
+## Test OGC WMS Endpoint
+To load test your WMS server run:
 ```bash
 docker run --rm -i -t -p 8089:8089 \
-       eduardrosert/locust-wms-test \
-       locust -f /app/wms-load-test/locustfile.py \
-              --host=https://example.com/wms
+       eduardrosert/locust-wms-test
 ```
+Then visit the locust interface at http://localhost:8089 and enter you wms endpoint URL as ``host``. 
+
+Examples for WMS endpoint URLs:
+- If your WMS capabilities document located at https://example.com/wms?version=1.3.0&request=GetCapabilities then you should enter ``https://example.com/wms`` as host url.
+- If your WMS capabilities document located at https://example.com/server/ows?service=wms&version=1.3.0&request=GetCapabilities then you should enter ``https://example.com/server/ows?service=wms`` as host url.
+
 
 ## Run with custom access token
 If your WMS server requires a simple authentication using some access token in the request, e.g. ``myauthkey=mysecretaccesstoken``, you can provide that token using the environment variable ``WMS_ACCESS_KEY``as follows:
 ```bash
 docker run --rm -i -t -p 8089:8089 \
        --env WMS_ACCESS_KEY=myauthkey=mysecretaccesstoken \
-       eduardrosert/locust-wms-test \
-       locust -f /app/wms-load-test/locustfile.py \
-              --host=https://example.com/wms
+       eduardrosert/locust-wms-test
 ```
 
 # Run pre-build images with Kubernetes
@@ -62,21 +64,10 @@ locust-wms        NodePort    10.105.111.227   <none>        8089:32038/TCP   2m
 ...
 ```
 
-## Run with WMS Service URL
-Edit the file ``k8s-locust-wms-test.yaml`` to configure the container configuration. Edit the ``value`` for environment variable ``WMS_SERVICE_URL`` to match your wms service url:
-```
-env:
-- name: WMS_SERVICE_URL
-  value: "https://example.com/wms"
-```
-After editing, reapply the configuration using ``kubectl apply -f k8s-locust-wms-test.yaml``.
-
 ## Run with custom access token
 If your WMS server requires a simple authentication using some access token in the request, e.g. ``myauthkey=mysecretaccesstoken``, you can provide that token using the environment variable ``WMS_ACCESS_KEY``in the deployment configuration. Edit file ``k8s-locust-wms-test.yaml`` and add the environment variable ``WMS_ACCESS_KEY`` with the key-value pair of your access token, e.g. ``myauthkey=mysecretaccesstoken``:
 ```
 env:
-- name: WMS_SERVICE_URL
-  value: "https://example.com/wms"
 - name: WMS_ACCESS_KEY
   value: "myauthkey=mysecretaccesstoken"
 ```

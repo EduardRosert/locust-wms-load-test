@@ -12,10 +12,17 @@ COPY testdata /app/wms-load-test/testdata
 # locust will listen at http://0.0.0.0:8089 by default
 EXPOSE 8089/tcp
 
+# application defaults
+#ENV WMS_ACCESS_KEY "myauthkey=mysecretaccesstoken"
+ENV WEIGHT_GET_CAPABILITIES "1"
+ENV WEIGHT_GET_LEGEND_GRAPHIC "2"
+ENV WEIGHT_GET_MAP "10"
+ENV LOG_VERBOSE "0"
+
 WORKDIR /app/wms-load-test/
 
-#CMD -f /app/wms-load-test/locustfile.py --host=https://example.com/wms
-#CMD python /app/wms-load-test/locustfile.py
+# ENTRYPOINT [ "locust" ]
+# CMD -f /app/wms-load-test/locustfile.py
 
 # METADATA
 # Build-time metadata as defined at http://label-schema.org
