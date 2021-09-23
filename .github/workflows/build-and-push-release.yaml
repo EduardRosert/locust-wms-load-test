@@ -38,5 +38,4 @@ jobs:
         with:
           context: ./
           push: true
-          image: eduardrosert/locust-wms-test
-          tags: latest, version-${{ steps.branch_info.outputs.SOURCE_TAG }}
+          tags: eduardrosert/locust-wms-test:latest,eduardrosert/locust-wms-test:version-${{ steps.branch_info.outputs.SOURCE_TAG }}
