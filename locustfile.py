@@ -455,9 +455,9 @@ def sendGetCapabilitiesRequest(client:locustclients.HttpSession, wmsversion:str)
         if response.url is None:
             response.failure("Request failed. No response from server.")
             return
+        url = urllib.parse.unquote(response.url)
 
         if not response.status_code == 200:
-            url = urllib.parse.unquote(response.url)
             errormsg = "Request failed with HTTP status code: '{}'\n Request URL: {}\n Request Params: {}\n Response-Content: '{}'".format(
                 response.status_code, 
                 url, 
@@ -472,14 +472,16 @@ def sendGetCapabilitiesRequest(client:locustclients.HttpSession, wmsversion:str)
             return
         
         if response.content == "":
+            vprint("Request failed (No data): {}".format(url))
             response.failure("No data")
             return
         
         try:
             capabilities = xmltodict.parse(response.content)
-            #vprint("Request successful: {}".format(url))
+            vprint("Request successful: {}".format(url))
             #return capabilities
         except:
+            vprint("Request failed (Failed to parse GetCapabilities XML): {}".format(url))
             response.failure("Failed to parse GetCapabilities XML")
             return
         
@@ -489,6 +491,7 @@ def sendGetCapabilitiesRequest(client:locustclients.HttpSession, wmsversion:str)
             parsed_layers = getAllLayers(capabilities=capabilities, wmsversion=wmsversion)
             return parsed_layers
         except Exception as ex:
+            vprint("Request failed (Failed to extract layers from GetCapabilities XML): {}".format(url))
             response.failure("Failed to extract layers from GetCapabilities XML version '{0}'. Error: {1}".format(wmsversion,ex))
             return
         
@@ -498,15 +501,15 @@ def sendGetMapRequest(client:locustclients.HttpSession, params:dict, wmsversion:
         if response.url is None:
             response.failure("Request failed. No response from server.")
             return
+        url = urllib.parse.unquote(response.url)
 
         if response.status_code == 200:
-            url = urllib.parse.unquote(response.url)
             if response.headers['content-type'] != "image/png":
                 errormsg = "Expected format 'image/png' but got '{}' instead\n Request URL: {}\n Request params: '{}'\nResponse: '{}'\n".format(response.headers['content-type'], url, params, response.text)
                 vprint( "Request failed:\n{}".format(errormsg) )
                 response.failure(errormsg)
             else:
-                #vprint("Request successful: {}".format(url))
+                vprint("Request successful: {}".format(url))
                 response.success()
 
 
@@ -525,9 +528,9 @@ def sendGetLegendGraphicRequest(client:locustclients.HttpSession, params:dict, w
         if response.url is None:
             response.failure("Request failed. No response from server.")
             return
+        url = urllib.parse.unquote(response.url)
 
         if response.status_code == 200:
-            url = urllib.parse.unquote(response.url)
             if response.headers['content-type'] != "image/png":
                 errormsg = "Expected format 'image/png' but got '{}' instead\n Request URL: {}\n Request params: '{}'\nResponse: '{}'\n".format(
                     response.headers['content-type'], 
@@ -537,7 +540,7 @@ def sendGetLegendGraphicRequest(client:locustclients.HttpSession, params:dict, w
                 vprint( "Request failed:\n{}".format(errormsg) )
                 response.failure(errormsg)
             else:
-                #vprint("Request successful: {}".format(url))
+                vprint("Request successful: {}".format(url))
                 response.success()
 
 class WebsiteTasks(TaskSet):
