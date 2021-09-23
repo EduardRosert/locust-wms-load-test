@@ -39,10 +39,29 @@ Examples for WMS endpoint URLs:
 
 
 ## Run with custom access token
-If your WMS server requires a simple authentication using some access token in the request, e.g. ``myauthkey=mysecretaccesstoken``, you can provide that token using the environment variable ``WMS_ACCESS_KEY``as follows:
+If your WMS server requires a simple authentication using some access token in the request, e.g. ``myauthkey=mysecretaccesstoken``, you can provide that token using the environment variable ``WMS_ACCESS_KEY`` as follows:
 ```bash
 docker run --rm -i -t -p 8089:8089 \
        --env WMS_ACCESS_KEY=myauthkey=mysecretaccesstoken \
+       eduardrosert/locust-wms-test
+```
+
+## Adjust request weights
+If you want to adjust the relative weights of the ``GetCapabilities``,``GetMap`` and ``GetLegendGraphic`` requests, you can do so by configuring the corresponding environment variables:
+```bash
+docker run --rm -i -t -p 8089:8089 \
+       --env WEIGHT_GET_CAPABILITIES=1 \
+       --env WEIGHT_GET_LEGEND_GRAPHIC=2 \
+       --env WEIGHT_GET_MAP=10 \
+       eduardrosert/locust-wms-test
+```
+The above setting means that for every ``GetCapabilities`` request there will be 2 ``GetLegendGraphic`` requests and 10 ``GetMap`` requests. You can disable a certain request by setting it's weight to ``0``. However you should not disable the ``GetCapabilities`` request, since without it the other requests cannot be generated.
+
+## Enable verbose logging
+To enable verbose logging, e.g. log the requested URLs, set the environment variable ``LOG_VERBOSE=1`` (disabled by default):
+```bash
+docker run --rm -i -t -p 8089:8089 \
+       --env LOG_VERBOSE=1 \
        eduardrosert/locust-wms-test
 ```
 
