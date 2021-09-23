@@ -1,9 +1,12 @@
 name: Build and Push (release)
 
 on:
+  # Trigger the workflow on all tagged pushes, but not for newly created branches  
   push:
-    branches:
-    - 'master'
+    branches-ignore:
+      - '**'
+    tags:
+      - '**'
 
   workflow_dispatch:
 
