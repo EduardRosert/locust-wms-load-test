@@ -20,10 +20,10 @@ spec:
         app: locust-wms
     spec:
       containers:
-      - image: eduardrosert/locust-wms-test
-        imagePullPolicy: IfNotPresent
+      - image: eduardrosert/locust-wms-test:latest
+        imagePullPolicy: Always
         name: locust-wms
-        #env:
+        env:
         #- name: WMS_ACCESS_KEY
         #  value: "myauthkey=mysecretaccesstoken"
         #- name: WEIGHT_GET_CAPABILITIES
@@ -34,6 +34,11 @@ spec:
         #  value: 10
         #- name: LOG_VERBOSE
         #  value: 1
+        - name: LOCUSTFILE
+          value: "locustfile.py"
+        - name: WMS_SERVICE_URL
+          value: https://ows.example.com/wms
+        command: [ "locust", "-f", "$(LOCUSTFILE)", "--host", "$(WMS_SERVICE_URL)" ]
         resources: {}
       terminationGracePeriodSeconds: 30
 ---
