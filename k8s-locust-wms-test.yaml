@@ -34,6 +34,10 @@ spec:
         #  value: 10
         #- name: LOG_VERBOSE
         #  value: 1
+        #- name: GET_MAP_MAX_WIDTH
+        #  value: 1200
+        #- name: GET_MAP_MAX_HEIGHT
+        #  value: 600
         - name: LOCUSTFILE
           value: "locustfile.py"
         - name: WMS_SERVICE_URL

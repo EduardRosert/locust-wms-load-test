@@ -30,6 +30,9 @@ WEIGHT_GET_CAPABILITIES = int(os.getenv('WEIGHT_GET_CAPABILITIES', "1"))
 WEIGHT_GET_LEGEND_GRAPHIC = int(os.getenv('WEIGHT_GET_LEGEND_GRAPHIC', "2"))
 WEIGHT_GET_MAP = int(os.getenv('WEIGHT_GET_MAP', "10"))
 
+GET_MAP_MAX_WIDTH = int(os.getenv('GET_MAP_MAX_WIDTH', "1200"))
+GET_MAP_MAX_HEIGHT = int(os.getenv('GET_MAP_MAX_HEIGHT', "600"))
+
 verbose = os.getenv('LOG_VERBOSE', '0')
 VERBOSE = False
 if verbose.lower() == "1":
@@ -350,8 +353,8 @@ def getRandomGetMapRequest(allLayers:dict, wmsversion:str):
         "request": "GetMap",
         crsparamname: "EPSG:4326",
         "layers": randomLayer["name"],
-        "width": 1200,
-        "height": 600,
+        "width": GET_MAP_MAX_WIDTH, # 1200
+        "height": GET_MAP_MAX_HEIGHT, # 600
         "format": "image/png",
         "bbox": randomBbox,
     }
